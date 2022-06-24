@@ -1,6 +1,6 @@
-let { MongoClient } = require('mongodb');
-require('dotenv').config()
+const { MongoClient } = require('mongodb');
 
+require('dotenv').config()
 let uri = process.env['DB_URI'] || console.log('Missing DB ENV variable.\n')
 
 let mongodb;
