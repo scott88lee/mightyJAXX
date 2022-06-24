@@ -1,7 +1,11 @@
 const express = require('express');
 const app = express();
 const db = require('./db/connection')
+
+// Middleware
 require('dotenv').config()
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 //Routes
 app.use('/users', require('./routes/users'))
