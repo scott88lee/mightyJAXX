@@ -1,10 +1,6 @@
 const Users = require('../models/users');
 const bcrypt = require('bcrypt');
-
-const listAll = async (req, res) => {
-    let result = await Users.getAll();
-    res.json(result);
-}
+const jwt = require('jsonwebtoken')
 
 const createNew = async (req, res) => {
     const validate = require('../helpers/validators');
@@ -32,24 +28,36 @@ const createNew = async (req, res) => {
     }
     let exist = await Users.findUser(req.body.email);
     if (exist) {
-        res.status(400).json({ Success: false, Message: 'User already exist.'});
+        res.status(400).json({ Success: false, Message: 'User already exist.' });
         return;
-    }
+    }//End of validation block
 
     // Create new user
-    let hash = await bcrypt.hash(req.body.password, 8);
-    let user = await Users.create(
-        {
-            email: req.body.email,
-            pwdHash: hash
-        }
-    );
+    try {
 
-    //Send JWT
-    res.json({
-        id: user.insertedId,
-        email: req.body.email
-    });
+        let hash = await bcrypt.hash(req.body.password, 8);
+        let user = await Users.create(
+            {
+                email: req.body.email,
+                pwdHash: hash
+            }
+        );
+
+        const payload = {
+            id: user.insertedId,
+            iat: Date.now()
+        };
+
+        const secret = process.env['JWT_SECRET']
+        const signedToken = jwt.sign(payload, secret, { expiresIn: '1d', algorithm: 'HS256' });
+        res.json({
+            id: user.insertedId,
+            token: "Bearer " + signedToken,
+            expires: "1d"
+        })
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 //Delete user
