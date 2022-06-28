@@ -1,11 +1,13 @@
 const Users = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+const validate = require('../helpers/validators');
+const mailer = require('../helpers/mailer');
+const auth = require('../helpers/auth');
 
 const createNew = async (req, res) => {
-    const validate = require('../helpers/validators');
 
-    //Validation block
+    // Validation block
     if (!validate.emailString(req.body.email)) {
         res.status(400).json({ Success: false, Message: 'Invalid email' });
         return;
@@ -30,9 +32,12 @@ const createNew = async (req, res) => {
     if (exist) {
         res.status(400).json({ Success: false, Message: 'User already exist.' });
         return;
-    }//End of validation block
+    }// End of validation block
 
+    // Hash password
     // Create new user
+    // Send email
+    // Send JWT
     try {
 
         let hash = await bcrypt.hash(req.body.password, 8);
@@ -48,6 +53,8 @@ const createNew = async (req, res) => {
             iat: Date.now()
         };
 
+        await mailer.sendEmail(req.body.email);
+
         const secret = process.env['JWT_SECRET']
         const signedToken = jwt.sign(payload, secret, { expiresIn: '1d', algorithm: 'HS256' });
         res.json({
@@ -60,6 +67,21 @@ const createNew = async (req, res) => {
     }
 }
 
+//Get user
+const getUser = async (req, res) => { //Modified to POST
+    let user = await Users.findUser(req.params.id);
+    // Send ambiguous response to prevent Username brute forcing
+    if (user) {
+        let verified = auth.validPassword(req.body.password, user.pwdHash)
+        if (isValid) {
+            const tokenObject = utils.issueJWT(user);
+            res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
+        } else {
+            res.status(401).json({ Success: false, Message: 'Invalid user or password.' });
+        }
+    }
+}
+
 //Delete user
 const deleteUser = async (req, res) => {
     let body = req.body;
@@ -69,6 +91,6 @@ const deleteUser = async (req, res) => {
 }
 
 module.exports = {
-    listAll,
     createNew,
+    getUser,
 }
