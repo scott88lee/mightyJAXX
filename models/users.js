@@ -12,7 +12,14 @@ const findUser = async (email) => {
     return result;
 }
 
+const create = async (user) => {
+    const Users = db.query().collection('users');
+    let result = await Users.insertOne(user);
+    return result;
+}
+
 module.exports = {
     getAll,
     findUser,
+    create
 }

@@ -33,8 +33,17 @@ const createNew = async (req, res) => {
         res.json({ Success: false, Message: 'User already exist.'});
         return;
     }
-    
 
+    let hash = await bcrypt.hash(req.body.password);
+    
+    await Users.create(
+        {
+            email: req.body.email,
+            pwdHash: hash
+        }
+    );
+    
+    //Send JWT
     res.send('Ok');
 }
 
