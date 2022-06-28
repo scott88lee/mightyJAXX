@@ -1,4 +1,5 @@
 const Users = require('../models/users');
+const bcrypt = require('bcrypt');
 
 const listAll = async (req, res) => {
     let result = await Users.getAll();
@@ -34,15 +35,14 @@ const createNew = async (req, res) => {
         return;
     }
 
-    let hash = await bcrypt.hash(req.body.password);
-    
+    let hash = await bcrypt.hash(req.body.password, 8);
+
     await Users.create(
         {
             email: req.body.email,
             pwdHash: hash
         }
     );
-    
     //Send JWT
     res.send('Ok');
 }
