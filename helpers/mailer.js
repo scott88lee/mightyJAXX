@@ -1,7 +1,10 @@
+require('dotenv').config()
 const nodemailer = require("nodemailer");
 
 module.exports = {
     sendEmail: async (email) => {
+        console.log(process.env.GMAIL_USER)
+        console.log(process.env.GMAIL_PWD)
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
             service: 'Gmail', // no need to set host or port etc.
