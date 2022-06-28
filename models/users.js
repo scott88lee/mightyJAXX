@@ -6,6 +6,13 @@ const getAll = async () => {
     return result;
 }
 
+const findUser = async (email) => {
+    const Users = db.query().collection('users');
+    let result = await Users.findOne({ email: email });
+    return result;
+}
+
 module.exports = {
     getAll,
+    findUser,
 }

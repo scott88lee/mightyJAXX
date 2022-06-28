@@ -1,18 +1,35 @@
+
+const passwordLength = (password) => {
+    return password.length >= 8;
+}
+
+const containsNumber = (password) => {
+    return /\d/.test(password);
+}
+
+const containsUpperCase = (password) => {
+    return /[A-Z]/.test(password);
+}
+
+const containsLowerCase = (password) => {
+    return /[a-z]/.test(password);
+}
+
+const containsSpecialChar = (password) => {
+    return /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+}
+
+const emailString = (email) => {
+    //check valid email string
+    let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(email);
+}
+
 module.exports = {
-    passwordLength: (password) => {
-        return password.length >= 8;
-    },
-
-    passwordCombination: (password) => {
-        // Must contain upper and lowercase letters,
-        // numbers and special characters cannot contain spaces
-        let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return regex.test(password);
-    },
-
-    emailValidation: (email) => {
-        //check valid email string
-        let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return regex.test(email);
-    }
+    passwordLength,
+    containsNumber,
+    containsUpperCase,
+    containsLowerCase,
+    containsSpecialChar,
+    emailString,
 }
