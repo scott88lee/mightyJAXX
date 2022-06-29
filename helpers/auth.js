@@ -12,7 +12,7 @@ async function validPassword(password, hash) {
 function issueJWT(user) {
   const _id = user._id;
 
-  const expiresIn = '1d';
+  const expiresIn = 172800;
 
   const payload = {
     sub: _id,
