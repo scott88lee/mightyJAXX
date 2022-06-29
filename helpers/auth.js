@@ -2,9 +2,11 @@ const jsonwebtoken = require('jsonwebtoken');
 const bcrypt = require('bcrypt')
 const secret = process.env['JWT_SECRET']
 
-function validPassword(password, hash) {
-    const hashVerify = bcrypt.hash(password, 8);
-    return hash === hashVerify;
+async function validPassword(password, hash) {
+    const hashVerify = await bcrypt.compare(password, hash);
+    console.log(hashVerify);
+  
+    return hashVerify;
 }
 
 function issueJWT(user) {
@@ -25,5 +27,10 @@ function issueJWT(user) {
   }
 }
 
+function decode(token){
+    return jsonwebtoken.verify(token, secret);
+}
+
 module.exports.validPassword = validPassword;
 module.exports.issueJWT = issueJWT;
+module.exports.decode = decode;
