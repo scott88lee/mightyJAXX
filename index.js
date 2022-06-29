@@ -1,5 +1,5 @@
-import express, { Express, Request, Response } from 'express';
-const app: Express = express();
+const express = require('express');
+const app = express();
 
 const db = require('./db/connection')
 const passport = require('passport');
@@ -22,8 +22,8 @@ app.use(passport.initialize());
 app.use('/users', require('./routes/users'));
 
 //Root and 404
-app.get('/', (req: Request, res: Response) => {res.send('Hello world')});
-app.get('*', (req: Request, res: Response) => {res.sendStatus(404)});
+app.get('/', (req, res) => {res.send('Hello world')});
+app.get('*', (req, res) => {res.sendStatus(404)});
 
 
 const PORT = process.env['PORT'] || 3000;
