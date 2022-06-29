@@ -1,5 +1,5 @@
-const express = require('express');
-const app = express();
+import express, { Express, Request, Response } from 'express';
+const app: Express = express();
 
 const db = require('./db/connection')
 const passport = require('passport');
@@ -8,7 +8,7 @@ const cors = require('cors');
 // Middleware
 require('dotenv').config()
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
 app.use(cors());
@@ -19,11 +19,11 @@ require('./config/passport')(passport);
 app.use(passport.initialize());
 
 //Routes
-app.use('/users', require('./routes/users'))
+app.use('/users', require('./routes/users'));
 
 //Root and 404
-app.get('/', (req, res) => {res.send('Hello world')})
-app.get('*', (req, res) => {res.sendStatus(404)});
+app.get('/', (req: Request, res: Response) => {res.send('Hello world')});
+app.get('*', (req: Request, res: Response) => {res.sendStatus(404)});
 
 
 const PORT = process.env['PORT'] || 3000;
