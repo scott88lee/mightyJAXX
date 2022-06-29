@@ -11,7 +11,7 @@
     "passport-jwt": "^4.0.0"
   },
   "scripts": {
-    "start": "ts-node --files -r tsconfig-paths/register ./index.ts",
+    "start": "ts-node --files ./index.ts",
     "dev": "ts-node-dev --files ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

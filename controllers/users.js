@@ -49,18 +49,18 @@ const createNew = async (req, res) => {
         );
 
         const payload = {
-            id: user.insertedId,
+            sub: user.insertedId,
             iat: Date.now()
         };
 
         await mailer.sendEmail(req.body.email);
 
         const secret = process.env['JWT_SECRET']
-        const signedToken = jwt.sign(payload, secret, { expiresIn: '1d', algorithm: 'HS256' });
+        const signedToken = jwt.sign(payload, secret, { expiresIn: 172800, algorithm: 'HS256' });
         res.json({
             id: user.insertedId,
             token: "Bearer " + signedToken,
-            expires: "1d"
+            expires: 172800
         })
     } catch (err) {
         console.log(err)
