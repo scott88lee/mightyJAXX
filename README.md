@@ -4,13 +4,15 @@ To run project locally:
 1. Create .env file with the secrets provided via email in project root folder
 2. Run command `npm install`
 3. Start server with `node index.js`
+4. Test on http://localhost:4000/users
 
 App is also deployed on
+
 http://mightyjaxx.samima.link/users
 
-Note / Modifications: 
-Requirement 7 updates email, assuming username is refering to email
-Requirement 8 was done with POST route instead, semantically its more correct to send a body with a POST route instead of GET
+#### Note / Modifications: 
+- Requirement 7 updates email, assuming username is refering to email
+- Requirement 8 was done with POST route instead, semantically its more correct to send a body with a POST route instead of GET
 
 
 ## Requirements
