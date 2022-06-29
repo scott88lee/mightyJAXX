@@ -69,28 +69,88 @@ const createNew = async (req, res) => {
 
 //Get user
 const getUser = async (req, res) => { //Modified to POST
-    let user = await Users.findUser(req.params.id);
-    // Send ambiguous response to prevent Username brute forcing
-    if (user) {
-        let verified = auth.validPassword(req.body.password, user.pwdHash)
-        if (isValid) {
-            const tokenObject = utils.issueJWT(user);
-            res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
-        } else {
-            res.status(401).json({ Success: false, Message: 'Invalid user or password.' });
+    try {
+        let user = await Users.findUserById(req.params.id);
+        //console.log(user)
+
+        // Send ambiguous response to prevent Username brute forcing
+        if (user && user.email === req.body.email) {
+            let verified = await auth.validPassword(req.body.password, user.pwdHash)
+            console.log(verified)
+            if (verified) {
+                const tokenObject = auth.issueJWT(user);
+                res.status(200).json({ success: true, token: tokenObject.token, expiresIn: tokenObject.expires });
+            }
         }
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+const updateUser = async (req, res) => {
+    try {
+        // let user = await Users.findUserById(req.params.id)
+        let token = req.headers.authorization.split(' ')[1];
+        let data = auth.decode(token)
+        console.log(data);
+
+        //Validation block
+        if (data.sub !== req.params.id) {  // Also checks if user exist.
+            res.status(401).json({ success: false, message: 'Unauthorized.' });
+            return;
+        }
+        // Assuming username is refering to email in Readme.md
+        if (!validate.emailString(req.body.email)) {
+            res.status(400).json({ Success: false, Message: 'Invalid email' });
+            return;
+        }// End of validation block
+
+        // Update user
+        let success = await Users.updateEmail(req.params.id, req.body.email);
+
+        if (success.acknowledged) {
+            res.status(200).json({ success: true, msg: "Updated email." });
+        } else {
+            res.status(400).json({ success: false, msg: "Something went wrong!" });
+        }
+    } catch (err) {
+        console.log(err)
     }
 }
 
 //Delete user
 const deleteUser = async (req, res) => {
-    let body = req.body;
-    console.log(req.body);
-    let result = await Users.getAll();
-    res.json(result);
+
+    try {
+        // let user = await Users.findUserById(req.params.id)
+        let token = req.headers.authorization.split(' ')[1];
+        let data = auth.decode(token)
+        console.log(data);
+
+        //Validation block
+        if (data.sub !== req.params.id) {  // Also checks if user exist.
+            res.status(401).json({ success: false, message: 'Unauthorized.' });
+            return;
+        }
+
+        // Delete user
+        let success = await Users.deleteUser(req.params.id);
+        console.log(success)
+
+        if (success) {
+            res.status(200).json({ success: true, msg: "Deleted user." });
+        } else {
+            res.status(400).json({ success: false, msg: "Something went wrong!" });
+        }
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 module.exports = {
     createNew,
     getUser,
+    updateUser,
+    deleteUser
 }

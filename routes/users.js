@@ -8,5 +8,6 @@ router.post('/:id', Users.getUser);
 
 //Protected routes
 router.put('/:id', passport.authenticate('jwt', { session: false }), Users.updateUser);
+router.delete('/:id', passport.authenticate('jwt', { session: false }), Users.deleteUser);
 
 module.exports = router;
