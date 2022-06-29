@@ -10,6 +10,8 @@ App is also deployed on
 
 http://mightyjaxx.samima.link/users
 
+[POSTMAN Collection](https://github.com/scott88lee/mightyJAXX/blob/main/postman_collection.json) for testing
+
 #### Note / Modifications: 
 - Requirement 7 updates email, assuming username is refering to email
 - Requirement 8 was done with POST route instead, semantically its more correct to send a body with a POST route instead of GET
