@@ -20,6 +20,7 @@ app.use(passport.initialize());
 
 //Routes
 app.use('/users', require('./routes/users'));
+app.use('/bridge', require('./routes/bridge'));
 
 //Root and 404
 app.get('/', (req, res) => {res.send('Hello world')});
