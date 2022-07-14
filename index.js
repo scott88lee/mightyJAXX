@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 
@@ -6,7 +8,6 @@ const passport = require('passport');
 const cors = require('cors');
 
 // Middleware
-require('dotenv').config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
@@ -21,6 +22,7 @@ app.use(passport.initialize());
 //Routes
 app.use('/users', require('./routes/users'));
 app.use('/bridge', require('./routes/bridge'));
+app.use('/artremis', require('./routes/artremis'));
 
 //Root and 404
 app.get('/', (req, res) => {res.send('Hello world')});
