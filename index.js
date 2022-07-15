@@ -19,14 +19,22 @@ require('./config/passport')(passport);
 // This will initialize the passport object on every request
 app.use(passport.initialize());
 
+
+//Loads the handlebars module
+const {engine} = require('express-handlebars');//Sets our app to use the handlebars engine
+app.engine('hbs', engine());
+app.set('view engine', 'hbs');
+app.set("views", "./views");
+
+
 //Routes
 app.use('/users', require('./routes/users'));
 app.use('/bridge', require('./routes/bridge'));
 app.use('/artremis', require('./routes/artremis'));
 
 //Root and 404
-app.get('/', (req, res) => {res.send('Hello world')});
-app.get('*', (req, res) => {res.sendStatus(404)});
+app.get('/', (req, res) => { res.render('home', {layout:'main'}) });
+app.get('*', (req, res) => { res.sendStatus(404) });
 
 
 const PORT = process.env['PORT'] || 3000;
