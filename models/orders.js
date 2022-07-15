@@ -12,7 +12,14 @@ const newOrder = async (order) => {
     return result;
 }
 
+const flushOrders = async () => {
+    const Orders = db.query().collection('orders');
+    let result = await Orders.deleteMany({});
+    return result;
+}
+
 module.exports = {
     getAll,
     newOrder,
+    flushOrders
 }

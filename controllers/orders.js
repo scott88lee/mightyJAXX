@@ -10,7 +10,13 @@ const newOrder = async (req, res) => {
     res.json(order);
 }
 
+const flushOrders = async (req, res) => {
+    await Orders.flushOrders();
+    res.send("200 OK");
+}
+
 module.exports = {
     getAll,
     newOrder,
+    flushOrders
 }
